@@ -5,9 +5,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using MovieCaseDev.Data;
 using MovieCaseDev.Entities;
+using MovieCaseDev.Services;
 using MovieCaseDev.Services.Abstract;
 using MovieCaseDev.Services.Concrete;
 using System;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -23,6 +25,7 @@ builder.Services.AddScoped<IEMailService, EMailService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHostedService<MovieSyncBackgroundService>();
 // Add services to the container.
 
 builder.Services.AddControllers();
