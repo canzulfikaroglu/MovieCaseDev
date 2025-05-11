@@ -5,7 +5,7 @@ using RestSharp;
 using System.Text.Json;
 using System.Security.Claims;
 
-namespace MovieCaseDev.Services
+namespace MovieCaseDev.Services.Concrete
 {
     public class MovieService
     {
@@ -16,7 +16,7 @@ namespace MovieCaseDev.Services
         {
             _context = context;
         }
- 
+
 
         public async Task ApiGet()
         {
@@ -68,7 +68,9 @@ namespace MovieCaseDev.Services
                     Console.WriteLine("API'den veri alınamadı.");
                 }
             }
+
         }
+
 
     }
 }

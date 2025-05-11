@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using MovieCaseDev.Data;
 using MovieCaseDev.Entities;
 using MovieCaseDev.Entities.Dtos;
-using MovieCaseDev.Services;
+using MovieCaseDev.Services.Concrete;
 using System.Security.Claims;
 
 namespace MovieCaseDev.Controllers
@@ -16,7 +16,7 @@ namespace MovieCaseDev.Controllers
     {
         private readonly MovieService _movieService;
         private readonly AppDbContext _context;
-
+        //burayı değiştiricez
         public MoviesController(MovieService movieService,AppDbContext context)
         {
             _movieService = movieService;
@@ -30,7 +30,7 @@ namespace MovieCaseDev.Controllers
             return Ok("Filmler başarıyla yüklendi.");
         }
         /// <summary>
-        /// 
+        /// filmleri veritabanından çekme endpointi
         /// </summary>
         /// <param name="page"></param>
         /// <param name="pageSize"></param>
@@ -50,6 +50,12 @@ namespace MovieCaseDev.Controllers
 
             return Ok(movies);
         }
+        /// <summary>
+        /// yorum ekleme endpointi
+        /// </summary>
+        /// <param name="movieId"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpPost("{movieId}/rate")]
         public async Task<IActionResult> AddRating(int movieId,[FromBody] AddRatingRequest request)
