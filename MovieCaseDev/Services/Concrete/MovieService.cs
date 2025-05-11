@@ -9,7 +9,7 @@ using System.Security.Claims;
 
 namespace MovieCaseDev.Services.Concrete
 {
-    public class MovieService
+    public class MovieService 
     {
         private readonly AppDbContext _context;
 
@@ -19,8 +19,6 @@ namespace MovieCaseDev.Services.Concrete
 
 
         }
-
-
         public async Task ApiGet()
         {
             for (int page = 1; 20 >= page; page++)

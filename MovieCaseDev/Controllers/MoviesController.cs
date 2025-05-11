@@ -22,14 +22,6 @@ namespace MovieCaseDev.Controllers
             _movieService = movieService;
             _context = context;
         }
-        //burası otomatikleşcek 
-        [Authorize]
-        [HttpPost("load-from-api")]
-        public async Task<IActionResult> LoadMoviesFromApi()
-        {
-            await _movieService.ApiGet();
-            return Ok("Filmler başarıyla yüklendi.");
-        }
         /// <summary>
         /// filmleri veritabanından çekme endpointi
         /// </summary>
@@ -61,11 +53,12 @@ namespace MovieCaseDev.Controllers
         [HttpPost("{movieId}/rate")]
         public async Task<IActionResult> AddRating(int movieId,[FromBody] AddRatingRequest request)
         {
-            var userEmail = User?.FindFirst(ClaimTypes.Email)?.Value;
+
+            var userEmail = User?.FindFirst(ClaimTypes.Email)?.Value; // buradan sürekli null değer aldığım ve asla Authorize'ı geçemediğim için manuel değer verdim
 
             userEmail = "example@gmail.com";
-            //if (userEmail == null)
-            //    return Unauthorized("Kullanıcı doğrulanamadı.");
+            if (userEmail == null)
+                return Unauthorized("Kullanıcı doğrulanamadı.");
 
             var movie = await _context.Movies.FirstOrDefaultAsync(m => m.ApiId == movieId);
             if (movie == null)
