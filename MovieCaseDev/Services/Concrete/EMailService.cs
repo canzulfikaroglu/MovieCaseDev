@@ -9,7 +9,6 @@ namespace MovieCaseDev.Services.Concrete
     public class EMailService : IEMailService
     {
      private readonly EmailSettings _settings;
-
         public EMailService(IOptions<EmailSettings> settings)
         {
             _settings = settings.Value;
@@ -20,10 +19,8 @@ namespace MovieCaseDev.Services.Concrete
             email.From.Add(new MailboxAddress(_settings.SenderName, _settings.SenderEmail));
             email.To.Add(MailboxAddress.Parse(toEmail));
             email.Subject = subject;
-
             var builder = new BodyBuilder { HtmlBody = body };
             email.Body = builder.ToMessageBody();
-
             using var smtp = new SmtpClient();
             await smtp.ConnectAsync(_settings.SmtpServer, _settings.Port, SecureSocketOptions.StartTls);
             await smtp.AuthenticateAsync(_settings.Username, _settings.Password);

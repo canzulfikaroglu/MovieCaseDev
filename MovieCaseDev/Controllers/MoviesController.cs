@@ -16,7 +16,6 @@ namespace MovieCaseDev.Controllers
     {
         private readonly MovieService _movieService;
         private readonly AppDbContext _context;
-        
         public MoviesController(MovieService movieService,AppDbContext context)
         {
             _movieService = movieService;
@@ -35,12 +34,9 @@ namespace MovieCaseDev.Controllers
             {
                 return BadRequest("Page and pageSize must be greater than zero.");
             }
-
-
             var movies = await _context.Movies
              .Where(m => m.ApiPageNumber == page)
              .ToListAsync();
-
             return Ok(movies);
         }
         /// <summary>
@@ -55,11 +51,9 @@ namespace MovieCaseDev.Controllers
         {
 
             var userEmail = User?.FindFirst(ClaimTypes.Email)?.Value; // buradan sürekli null değer aldığım ve asla Authorize'ı geçemediğim için manuel değer verdim
-
             userEmail = "example@gmail.com";
             if (userEmail == null)
                 return Unauthorized("Kullanıcı doğrulanamadı.");
-
             var movie = await _context.Movies.FirstOrDefaultAsync(m => m.ApiId == movieId);
             if (movie == null)
                 return NotFound("Film bulunamadı.");
@@ -71,10 +65,8 @@ namespace MovieCaseDev.Controllers
                 Note = request.Note,
                 Score = request.Score
             };
-
             _context.MovieRatings.Add(rating);
             await _context.SaveChangesAsync();
-
             return Ok("Puan eklendi.");
         }
 
@@ -86,29 +78,20 @@ namespace MovieCaseDev.Controllers
                 .Where(m => m.Id == id)
                 .Include(m => m.Ratings)  // Yorumları da dahil et
                 .FirstOrDefaultAsync();
-
             if (movie == null)
             {
                 return NotFound("Film bulunamadı.");
             }
-
-
             var averageScore = movie.Ratings.Any()
                 ? movie.Ratings.Average(r => r.Score)
                 : 0;
-
-
             var totalRatings = movie.Ratings.Count();
-
-
             var allRatings = movie.Ratings.Select(r => new PublicRatingDto
             {
                 UserEmail = r.UserEmail,
                 Score = r.Score,
                 Note = r.Note
             }).ToList();
-
-   
             var movieDetailResponse = new MovieDetailResponse
             {
                 Id = movie.Id,
@@ -119,7 +102,6 @@ namespace MovieCaseDev.Controllers
                 TotalRatings = totalRatings,
                 AllRatings = allRatings
             };
-
             return Ok(movieDetailResponse);
         }
 

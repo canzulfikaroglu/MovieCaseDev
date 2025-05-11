@@ -11,13 +11,11 @@ namespace MovieCaseDev.Controllers
     {
         private readonly IEMailService _emailService;
         private readonly AppDbContext _context;
-
         public EmailController(IEMailService emailService,AppDbContext context)
         {
             _emailService = emailService;
             _context = context;
         }
-
         [HttpPost("recommend")]
         public async Task<IActionResult> RecommendMovie([FromBody] EmailRequest request)
         {
@@ -26,13 +24,10 @@ namespace MovieCaseDev.Controllers
                                   .FirstOrDefaultAsync();
             string subject = "Bugünün Film Tavsiyesi";
             string body = $"Merhaba! Bugünün film tavsiyesi: <strong>{film.OriginalTitle}</strong>. İyi seyirler ";
-           
-
             await _emailService.SendEmailAsync(request.Email, subject, body);
             return Ok("Email gönderildi.");
         }
     }
-
     public class EmailRequest
     {
         public string Email { get; set; }
