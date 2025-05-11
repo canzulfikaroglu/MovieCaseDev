@@ -5,22 +5,25 @@ using RestSharp;
 using System.Text.Json;
 using System.Security.Claims;
 
+
+
 namespace MovieCaseDev.Services.Concrete
 {
     public class MovieService
     {
         private readonly AppDbContext _context;
 
-
         public MovieService(AppDbContext context)
         {
             _context = context;
+
+
         }
 
 
         public async Task ApiGet()
         {
-            for (int page = 1; 10 >= page; page++)
+            for (int page = 1; 20 >= page; page++)
             {
                 var options = new RestClientOptions($"https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page={page}&sort_by=popularity.desc");
                 var client = new RestClient(options);
@@ -48,19 +51,23 @@ namespace MovieCaseDev.Services.Concrete
                                     ApiId = apiMovie.Id,
                                     OriginalTitle = apiMovie.Original_Title,
                                     Overview = apiMovie.Overview,
-                                    ReleaseDate = DateTime.SpecifyKind(apiMovie.Release_Date, DateTimeKind.Utc)
+                                    ReleaseDate = DateTime.SpecifyKind(apiMovie.Release_Date, DateTimeKind.Utc),
+                                    ApiPageNumber = page
+
                                 };
 
                                 _context.Movies.Add(movie); //bunu açtığımızda veritabanına kaydediyor 
                                 Console.WriteLine($"ApiId: {movie.ApiId}, Title: {movie.OriginalTitle}, Overview: {movie.Overview}, ReleaseDate: {movie.ReleaseDate}");
                                 Console.WriteLine();
+                               
                             }
                         }
                         await _context.SaveChangesAsync();
 
 
-
+                        Console.WriteLine("Film verileri API'den çekildi!");
                         Console.WriteLine("Veriler başarıyla kaydedildi.");
+                    
                     }
                 }
                 else

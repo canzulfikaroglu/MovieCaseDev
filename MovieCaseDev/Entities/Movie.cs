@@ -8,5 +8,6 @@
         public string Overview { get; set; } //aciklama
         public DateTime ReleaseDate { get; set; } //cikiş tarihi
         public List<MovieRating> Ratings { get; set; }
+        public int ApiPageNumber { get; set; }
     }
 }

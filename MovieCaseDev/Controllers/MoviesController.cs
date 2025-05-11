@@ -16,12 +16,13 @@ namespace MovieCaseDev.Controllers
     {
         private readonly MovieService _movieService;
         private readonly AppDbContext _context;
-        //burayı değiştiricez
+        
         public MoviesController(MovieService movieService,AppDbContext context)
         {
             _movieService = movieService;
             _context = context;
         }
+        //burası otomatikleşcek 
         [Authorize]
         [HttpPost("load-from-api")]
         public async Task<IActionResult> LoadMoviesFromApi()
@@ -36,17 +37,17 @@ namespace MovieCaseDev.Controllers
         /// <param name="pageSize"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> GetMovies([FromQuery] int page = 1, [FromQuery] int pageSize = 20)
+        public async Task<IActionResult> GetMovies([FromQuery] int page = 1)
         {
-            if (page < 1 || pageSize < 1)
+            if (page < 1)
             {
                 return BadRequest("Page and pageSize must be greater than zero.");
             }
 
+
             var movies = await _context.Movies
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
+             .Where(m => m.ApiPageNumber == page)
+             .ToListAsync();
 
             return Ok(movies);
         }
