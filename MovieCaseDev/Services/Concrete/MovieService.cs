@@ -37,8 +37,8 @@ namespace MovieCaseDev.Services.Concrete
                             if (!_context.Movies.Any(m => m.ApiId == apiMovie.Id))
                             {
                                 var movie = new Movie
-                                {
-                                    ApiId = apiMovie.Id,
+                                {   
+                                    ApiId = apiMovie.Id, //sol taraf apiden gelenler
                                     OriginalTitle = apiMovie.Original_Title,
                                     Overview = apiMovie.Overview,
                                     ReleaseDate = DateTime.SpecifyKind(apiMovie.Release_Date, DateTimeKind.Utc),

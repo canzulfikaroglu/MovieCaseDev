@@ -27,6 +27,7 @@ namespace MovieCaseDev.Controllers
         /// <param name="page"></param>
         /// <param name="pageSize"></param>
         /// <returns></returns>
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetMovies([FromQuery] int page = 1)
         {
@@ -49,15 +50,13 @@ namespace MovieCaseDev.Controllers
         [HttpPost("{movieId}/rate")]
         public async Task<IActionResult> AddRating(int movieId,[FromBody] AddRatingRequest request)
         {
+            var userEmail = User?.FindFirst("name")?.Value;
 
-            var userEmail = User?.FindFirst(ClaimTypes.Email)?.Value; // buradan sürekli null değer aldığım ve asla Authorize'ı geçemediğim için manuel değer verdim
-            userEmail = "example@gmail.com";
             if (userEmail == null)
                 return Unauthorized("Kullanıcı doğrulanamadı.");
-            var movie = await _context.Movies.FirstOrDefaultAsync(m => m.ApiId == movieId);
+            var movie = await _context.Movies.FirstOrDefaultAsync(m => m.Id == movieId);
             if (movie == null)
                 return NotFound("Film bulunamadı.");
-            // ApiIdyi aktaramadım çünkü foreign key olduğu için idye göre yapmam gerekiyordu
             var rating = new MovieRating
             {
                 MovieId = movie.Id,
@@ -69,7 +68,7 @@ namespace MovieCaseDev.Controllers
             await _context.SaveChangesAsync();
             return Ok("Puan eklendi.");
         }
-
+        [AllowAnonymous]
         [HttpGet("{id}/details")]
         public async Task<IActionResult> GetMovieDetails(int id)
         {

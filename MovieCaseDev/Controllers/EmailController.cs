@@ -16,12 +16,10 @@ namespace MovieCaseDev.Controllers
             _emailService = emailService;
             _context = context;
         }
-        [HttpPost("recommend")]
-        public async Task<IActionResult> RecommendMovie([FromBody] EmailRequest request)
+        [HttpPost("{id}/recommend")]
+        public async Task<IActionResult> RecommendMovie(int id,[FromBody] EmailRequest request)
         {
-            var film = await _context.Movies
-                                  .OrderBy(r => Guid.NewGuid())
-                                  .FirstOrDefaultAsync();
+            var film = await _context.Movies.FirstOrDefaultAsync(m => m.Id == id);
             string subject = "Bugünün Film Tavsiyesi";
             string body = $"Merhaba! Bugünün film tavsiyesi: <strong>{film.OriginalTitle}</strong>. İyi seyirler ";
             await _emailService.SendEmailAsync(request.Email, subject, body);
